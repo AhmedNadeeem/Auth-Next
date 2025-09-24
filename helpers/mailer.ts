@@ -28,7 +28,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
     });
 
     const mailOptions = {
-      from: "your email",
+      from: process.env.SENDER_MAIL,
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify your email" : "Reset your password",
@@ -38,7 +38,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
           : `<p>Click <a href="${process.env.DOMAIN}/resetpassword?token=${hashedToken}">here</a> to reset your password. or copy and paste the link below in your browser.<br> ${process.env.DOMAIN}/resetpassword?token=${hashedToken} </p>`,
     };
 
-    const mailResponse = await transport.sendMail(mailOptions);
+    const mailResponse = transport.sendMail(mailOptions);
     return mailResponse;
   } catch (error: any) {
     throw new Error(error.message);

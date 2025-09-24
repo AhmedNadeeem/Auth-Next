@@ -9,7 +9,7 @@ connect();
 export async function POST( req: NextRequest ){
     try {
         const reqBody = await req.json();
-        const { username, email, passsword } = reqBody;
+        const { username, email, password } = reqBody;
         // validation
         console.log(reqBody);
 
@@ -20,7 +20,7 @@ export async function POST( req: NextRequest ){
         }
 
         const salt = await bcryptjs.genSalt(10);
-        const hashPass = await bcryptjs.hash(passsword, salt);
+        const hashPass = await bcryptjs.hash(password, salt);
 
         const newUser = new User({
             username,
@@ -41,6 +41,7 @@ export async function POST( req: NextRequest ){
         })
 
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error(error)
+        return NextResponse.json({ error: error }, { status: 500 });
     }
 }
