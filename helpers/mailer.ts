@@ -18,12 +18,21 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
       });
     }
 
-    const transport = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
+    // const transport = nodemailer.createTransport({
+    //   host: "sandbox.smtp.mailtrap.io",
+    //   port: 2525,
+    //   auth: {
+    //     user: "e54e04417eaa84",
+    //     pass: "****6421",
+    //   },
+    // });
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
       auth: {
-        user: "e54e04417eaa84",
-        pass: "****6421",
+        user: process.env.ETHEREAL_USER,
+        pass: process.env.ETHEREAL_PASS
       },
     });
 
@@ -38,7 +47,7 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
           : `<p>Click <a href="${process.env.DOMAIN}/resetpassword?token=${hashedToken}">here</a> to reset your password. or copy and paste the link below in your browser.<br> ${process.env.DOMAIN}/resetpassword?token=${hashedToken} </p>`,
     };
 
-    const mailResponse = transport.sendMail(mailOptions);
+    const mailResponse = transporter.sendMail(mailOptions);
     return mailResponse;
   } catch (error: any) {
     throw new Error(error.message);
